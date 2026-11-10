@@ -82,7 +82,7 @@ tag='v'+release_version
 try:release=api('releases/tags/'+tag)
 except urllib.error.HTTPError as error:
     if error.code!=404:raise
-    release=api('releases',{'tag_name':tag,'target_commitish':'main','name':'대영통운 통합 재고관리 V'+release_version,'body':'서명·암호화된 Windows 자동업데이트 패키지. D 회사 로고 아이콘 적용.','draft':False,'prerelease':False},'POST')
+    release=api('releases',{'tag_name':tag,'target_commitish':'main','name':'대영통운 통합 재고관리 V'+release_version,'body':descriptor.get('notes','서명·암호화된 Windows 자동업데이트 패키지.'),'draft':False,'prerelease':False},'POST')
 if release['draft'] or release['prerelease']:raise ValueError('Release must be published and stable')
 name='inventory-'+release_version+'.bin'
 existing=next((a for a in release['assets'] if a['name']==name),None)
