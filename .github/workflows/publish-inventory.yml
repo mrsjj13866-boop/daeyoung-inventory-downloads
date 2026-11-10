@@ -1,0 +1,23 @@
+name: Publish signed encrypted inventory update
+on:
+  push:
+    branches: [main]
+    paths: ['release-staging/current.json']
+permissions:
+  contents: write
+concurrency:
+  group: inventory-release-publish
+  cancel-in-progress: false
+jobs:
+  publish:
+    if: github.repository == 'mrsjj13866-boop/daeyoung-inventory-downloads'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Verify signature and publish encrypted release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 .github/scripts/publish_inventory.py
